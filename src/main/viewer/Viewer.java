@@ -12,16 +12,15 @@ import java.io.File;
 
 public class Viewer extends JFrame {
 
-    private final JMenuBar menuBar = new JMenuBar();
-    private final JMenu files = new JMenu("File");
-    private final JMenu thinning_label = new JMenu("Thinning");
-    private final JMenu binarization = new JMenu("Binarization");
-    private final JMenuItem loadImage = new JMenuItem("Load image");
-    private final JMenuItem saveImage = new JMenuItem("Save image");
-    private final JMenuItem bin = new JMenuItem("Binarization");
-    private final JMenuItem thin1 = new JMenuItem("Thinning1");
-    private final JMenuItem thin2 = new JMenuItem("Thinning2");
-    private final JLabel imageLabel = new JLabel();
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu files = new JMenu("File");
+    private JMenu thinning_label = new JMenu("Thinning");
+    private JMenu binarization = new JMenu("Binarization");
+    private JMenuItem loadImage = new JMenuItem("Load image");
+    private JMenuItem saveImage = new JMenuItem("Save image");
+    private JMenuItem bin = new JMenuItem("Binarization");
+    private JMenuItem thin = new JMenuItem("Thinn");
+    private JLabel imageLabel = new JLabel();
     private Thinning thinning;
 
     public Viewer() {
@@ -34,8 +33,7 @@ public class Viewer extends JFrame {
         this.files.add(this.loadImage);
         this.files.add(this.saveImage);
         menuBar.add(thinning_label);
-        thinning_label.add(thin1);
-        thinning_label.add(thin2);
+        thinning_label.add(thin);
 
         menuBar.add(binarization);
         binarization.add(bin);
@@ -54,10 +52,8 @@ public class Viewer extends JFrame {
                 @Override
                 public boolean accept(File f) {
                     String fileName = f.getName().toLowerCase();
-                    if(fileName.endsWith(".jpg") || fileName.endsWith(".png")
-                            || fileName.endsWith(".tiff") || fileName.endsWith(".jpeg")) {
-                        return true;
-                    } else return false;
+                    return fileName.endsWith(".jpg") || fileName.endsWith(".png")
+                            || fileName.endsWith(".tiff") || fileName.endsWith(".jpeg");
                 }
 
                 @Override
@@ -91,14 +87,10 @@ public class Viewer extends JFrame {
             imageLabel.setIcon(new ImageIcon(image));
         });
 
-        thin1.addActionListener(e -> {
-            BufferedImage image = ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon());
-            imageLabel.setIcon(new ImageIcon(thinning.thinning1(image)));
-        });
 
-        thin2.addActionListener(e -> {
+        thin.addActionListener(e -> {
             BufferedImage image = ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon());
-            imageLabel.setIcon(new ImageIcon(thinning.thinning2(image)));
+            imageLabel.setIcon(new ImageIcon(thinning.thin(image)));
         });
 
     }
