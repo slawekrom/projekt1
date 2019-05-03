@@ -42,14 +42,14 @@ public abstract class CrossingNumber {
                 }
             }
         }
-        int sum1 = Math.abs(tab[0]-tab[1]);
-        int sum2 = Math.abs(tab[1]-tab[2]);
-        int sum3 = Math.abs(tab[2]-tab[4]);
-        int sum4 = Math.abs(tab[4]-tab[7]);
-        int sum5 = Math.abs(tab[7]-tab[6]);
-        int sum6 = Math.abs(tab[6]-tab[5]);
-        int sum7 = Math.abs(tab[5]-tab[3]);
-        int sum8 = Math.abs(tab[3]-tab[0]);
+        int sum1 = Math.abs(tab[4]-tab[2]);
+        int sum2 = Math.abs(tab[2]-tab[1]);
+        int sum3 = Math.abs(tab[1]-tab[0]);
+        int sum4 = Math.abs(tab[0]-tab[3]);
+        int sum5 = Math.abs(tab[3]-tab[5]);
+        int sum6 = Math.abs(tab[5]-tab[6]);
+        int sum7 = Math.abs(tab[6]-tab[7]);
+        int sum8 = Math.abs(tab[7]-tab[4]);
         int sum=(sum1+sum2+sum3+sum4+sum5+sum6+sum7+sum8)/2;
         if(sum!=2){
             minutions.add(new Point(w,h));
