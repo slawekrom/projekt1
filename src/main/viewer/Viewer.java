@@ -1,5 +1,6 @@
 package main.viewer;
 
+import main.minutions.CrossingNumber;
 import main.shared.ImageSharedOperations;
 import main.thinning.Thinning;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -16,10 +18,12 @@ public class Viewer extends JFrame {
     private JMenu files = new JMenu("File");
     private JMenu thinning_label = new JMenu("Thinning");
     private JMenu binarization = new JMenu("Binarization");
+    private JMenu minutions = new JMenu("Detect minutions");
     private JMenuItem loadImage = new JMenuItem("Load image");
     private JMenuItem saveImage = new JMenuItem("Save image");
     private JMenuItem bin = new JMenuItem("Binarization");
     private JMenuItem thin = new JMenuItem("Thinn");
+    private JMenuItem crossingNumber = new JMenuItem("Crossing Number algorithm");
     private JLabel imageLabel = new JLabel();
     private Thinning thinning;
 
@@ -37,6 +41,9 @@ public class Viewer extends JFrame {
 
         menuBar.add(binarization);
         binarization.add(bin);
+
+        menuBar.add(minutions);
+        minutions.add(crossingNumber);
 
         this.add(this.menuBar, BorderLayout.NORTH);
         this.add(this.imageLabel, BorderLayout.CENTER);
@@ -93,6 +100,16 @@ public class Viewer extends JFrame {
             imageLabel.setIcon(new ImageIcon(thinning.thin(image)));
         });
 
+        crossingNumber.addActionListener(e -> {
+            BufferedImage image = CrossingNumber.filterImage(ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
+            imageLabel.setIcon(new ImageIcon(image));
+            CrossingNumber.minutions.forEach(m->{
+                System.out.println("w: "+m.getX()+", h: "+m.getY());
+            });
+        });
+
     }
+
+
 
 }
