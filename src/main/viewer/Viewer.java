@@ -88,7 +88,7 @@ public class Viewer extends JFrame {
                 for(int h = 0; h < image.getHeight(); h++) {
                     Color c = new Color(image.getRGB(w, h));
                     image.setRGB(w, h,
-                            c.getRed() >= 100 ? Color.WHITE.getRGB() : Color.BLACK.getRGB());
+                            (c.getRed()+c.getGreen()+c.getBlue())/3 >= 45 ? Color.WHITE.getRGB() : Color.BLACK.getRGB());
                 }
             }
             imageLabel.setIcon(new ImageIcon(image));

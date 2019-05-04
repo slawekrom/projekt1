@@ -14,6 +14,7 @@ public abstract class CrossingNumber {
     public static List<Point> minutionsRozgalezienia = new ArrayList<>();
 
     public static void filterImage(BufferedImage img) {
+        clearLists();
         for(int w = 1; w < img.getWidth() - 1; w++) {
             for(int h = 1; h < img.getHeight() - 1; h++) {
                 Color c =new Color(img.getRGB(w,h));
@@ -79,6 +80,10 @@ public abstract class CrossingNumber {
         for(int i =0; i<minutions2.size();i=i+2){
             minutions.remove(minutions2.get(i));
         }
+    }
+    private static void clearLists(){
+        minutions.clear();
+        minutionsRozgalezienia.clear();
     }
 }
 
