@@ -101,15 +101,34 @@ public class Viewer extends JFrame {
         });
 
         crossingNumber.addActionListener(e -> {
-            BufferedImage image = CrossingNumber.filterImage(ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
-            imageLabel.setIcon(new ImageIcon(image));
+            BufferedImage image = (ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
+            CrossingNumber.filterImage(image);
             CrossingNumber.minutions.forEach(m->{
                 System.out.println("w: "+m.getX()+", h: "+m.getY());
+                drawCircle(image, (int)m.getX(), (int)m.getY());
+
             });
+            imageLabel.setIcon(new ImageIcon(image));
         });
 
     }
 
-
+    void drawCircle(BufferedImage image, int w, int h){
+        if(w> 2 && w< image.getWidth()-2 && h > 2 && h< image.getHeight()-2){
+            int red = Color.RED.getRGB();
+            image.setRGB(w-1,h-2,red);
+            image.setRGB(w,h-2,red);
+            image.setRGB(w+1,h-2,red);
+            image.setRGB(w-2,h-1,red);
+            image.setRGB(w+2,h-1,red);
+            image.setRGB(w-2,h,red);
+            image.setRGB(w+2,h,red);
+            image.setRGB(w-2,h+1,red);
+            image.setRGB(w+2,h+1,red);
+            image.setRGB(w-1,h+2,red);
+            image.setRGB(w,h+2,red);
+            image.setRGB(w+1,h+2,red);
+        }
+    }
 
 }

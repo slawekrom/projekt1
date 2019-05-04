@@ -11,17 +11,16 @@ public abstract class CrossingNumber {
 
     public static List<Point> minutions = new ArrayList<>();
 
-    public static BufferedImage filterImage(BufferedImage img) {
+    public static void filterImage(BufferedImage img) {
         BufferedImage copy = deepCopy(img);
         for(int w = 1; w < img.getWidth() - 1; w++) {
             for(int h = 1; h < img.getHeight() - 1; h++) {
                 Color c =new Color(img.getRGB(w,h));
                 if(c.getRed()!=255){
-                    copy.setRGB(w, h, calculateNewPixelValue(img, w, h));
+                    calculateNewPixelValue(img, w, h);
                 }
             }
         }
-        return copy;
     }
 
     public static int calculateNewPixelValue(BufferedImage img, int w, int h) {
@@ -53,8 +52,7 @@ public abstract class CrossingNumber {
         int sum=(sum1+sum2+sum3+sum4+sum5+sum6+sum7+sum8)/2;
         if(sum!=2){
             minutions.add(new Point(w,h));
-            Color c = new Color(Color.RED.getRGB());
-            return c.getRGB();
+            return Color.BLACK.getRGB();
         }else{
             return Color.BLACK.getRGB();
         }
