@@ -103,7 +103,9 @@ public class Viewer extends JFrame {
         crossingNumber.addActionListener(e -> {
             BufferedImage image = (ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
             CrossingNumber.filterImage(image);
-            CrossingNumber.filterMinutions(image.getWidth(), image.getHeight());
+            for(int i=0;i<4;i++) {
+                CrossingNumber.filterMinutions(image.getWidth(), image.getHeight());
+            }
             CrossingNumber.minutions.forEach(m->{
                 System.out.println("w: "+m.getX()+", h: "+m.getY());
                 if(CrossingNumber.minutionsRozgalezienia.contains(m)){
