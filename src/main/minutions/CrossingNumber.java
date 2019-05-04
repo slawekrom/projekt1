@@ -6,24 +6,25 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class CrossingNumber {
 
     public static List<Point> minutions = new ArrayList<>();
+    public static List<Point> minutionsRozgalezienia = new ArrayList<>();
 
     public static void filterImage(BufferedImage img) {
-        BufferedImage copy = deepCopy(img);
         for(int w = 1; w < img.getWidth() - 1; w++) {
             for(int h = 1; h < img.getHeight() - 1; h++) {
                 Color c =new Color(img.getRGB(w,h));
                 if(c.getRed()!=255){
-                    calculateNewPixelValue(img, w, h);
+                    checkPixel(img, w, h);
                 }
             }
         }
     }
 
-    public static int calculateNewPixelValue(BufferedImage img, int w, int h) {
+    public static void checkPixel(BufferedImage img, int w, int h) {
         int num=0;
         int []tab = new int[8];
         for(int i = -1; i < 2; i++) {
@@ -52,17 +53,32 @@ public abstract class CrossingNumber {
         int sum=(sum1+sum2+sum3+sum4+sum5+sum6+sum7+sum8)/2;
         if(sum!=2){
             minutions.add(new Point(w,h));
-            return Color.BLACK.getRGB();
-        }else{
-            return Color.BLACK.getRGB();
+            if(sum>2){
+                minutionsRozgalezienia.add(new Point(w,h));
+            }
         }
     }
 
-    public static BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
-        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
-        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    public static void filterMinutions(int width, int height){
+        List<Point> minutionsToDelete = new ArrayList<>();
+        minutions.forEach(m->{
+            if(m.getX()> 3 && m.getX()< width-3 && m.getY()> 3 && m.getY()< height-3){
+                for(int i=-4;i<=4;i++){
+                    for(int j=-4;j<=4;j++){
+                        if(!(i==0&&j==0)) {
+                            Point point = new Point((int) (m.getX() + i), (int) (m.getY() + j));
+                            if (minutions.contains(point)) {
+                                minutionsToDelete.add(point);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        List<Point> minutions2 = minutionsToDelete.stream().distinct().collect(Collectors.toList());
+        for(int i =0; i<minutions2.size();i=i+2){
+            minutions.remove(minutions2.get(i));
+        }
     }
-
 }
+

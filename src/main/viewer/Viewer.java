@@ -103,31 +103,41 @@ public class Viewer extends JFrame {
         crossingNumber.addActionListener(e -> {
             BufferedImage image = (ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
             CrossingNumber.filterImage(image);
+            CrossingNumber.filterMinutions(image.getWidth(), image.getHeight());
             CrossingNumber.minutions.forEach(m->{
                 System.out.println("w: "+m.getX()+", h: "+m.getY());
-                drawCircle(image, (int)m.getX(), (int)m.getY());
-
+                if(CrossingNumber.minutionsRozgalezienia.contains(m)){
+                    drawCircle(image, (int)m.getX(), (int)m.getY(),false);
+                }else{
+                    drawCircle(image, (int)m.getX(), (int)m.getY(),true);
+                }
             });
             imageLabel.setIcon(new ImageIcon(image));
         });
 
     }
 
-    void drawCircle(BufferedImage image, int w, int h){
+    void drawCircle(BufferedImage image, int w, int h, boolean zakonczenie){
+        int color;
         if(w> 2 && w< image.getWidth()-2 && h > 2 && h< image.getHeight()-2){
-            int red = Color.RED.getRGB();
-            image.setRGB(w-1,h-2,red);
-            image.setRGB(w,h-2,red);
-            image.setRGB(w+1,h-2,red);
-            image.setRGB(w-2,h-1,red);
-            image.setRGB(w+2,h-1,red);
-            image.setRGB(w-2,h,red);
-            image.setRGB(w+2,h,red);
-            image.setRGB(w-2,h+1,red);
-            image.setRGB(w+2,h+1,red);
-            image.setRGB(w-1,h+2,red);
-            image.setRGB(w,h+2,red);
-            image.setRGB(w+1,h+2,red);
+            if(zakonczenie){
+                color = Color.RED.getRGB();
+            }else{
+                Color color1 = new Color(34,139,34);
+                color = color1.getRGB();
+            }
+            image.setRGB(w-1,h-2,color);
+            image.setRGB(w,h-2,color);
+            image.setRGB(w+1,h-2,color);
+            image.setRGB(w-2,h-1,color);
+            image.setRGB(w+2,h-1,color);
+            image.setRGB(w-2,h,color);
+            image.setRGB(w+2,h,color);
+            image.setRGB(w-2,h+1,color);
+            image.setRGB(w+2,h+1,color);
+            image.setRGB(w-1,h+2,color);
+            image.setRGB(w,h+2,color);
+            image.setRGB(w+1,h+2,color);
         }
     }
 
