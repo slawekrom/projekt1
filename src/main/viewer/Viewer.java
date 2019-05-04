@@ -4,6 +4,7 @@ import main.minutions.CrossingNumber;
 import main.shared.ImageSharedOperations;
 import main.thinning.Thinning;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class Viewer extends JFrame {
 
@@ -76,10 +78,20 @@ public class Viewer extends JFrame {
             }
         });
 
+//        this.saveImage.addActionListener((ActionEvent e) -> {
+//            String path = "./image.jpg";
+//            BufferedImage img = ImageSharedOperations.convertIconToImage((ImageIcon) this.imageLabel.getIcon());
+//            ImageSharedOperations.saveImage(img, path);
+//        });
+
         this.saveImage.addActionListener((ActionEvent e) -> {
-            String path = "./image.jpg";
-            BufferedImage img = ImageSharedOperations.convertIconToImage((ImageIcon) this.imageLabel.getIcon());
-            ImageSharedOperations.saveImage(img, path);
+            BufferedImage bi = ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon());
+            File outputfile = new File("saved.png");
+            try {
+                ImageIO.write(bi, "png", outputfile);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
 
         bin.addActionListener(e -> {
