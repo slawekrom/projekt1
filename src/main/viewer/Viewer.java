@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,8 +28,10 @@ public class Viewer extends JFrame {
     private JMenuItem bin = new JMenuItem("Binarization");
     private JMenuItem thin = new JMenuItem("Thinn");
     private JMenuItem crossingNumber = new JMenuItem("Crossing Number algorithm");
+    private JMenuItem filter = new JMenuItem("Filter minutions");
     private JLabel imageLabel = new JLabel();
     private Thinning thinning;
+    private BufferedImage filteredImage;
 
     public Viewer() {
         this.setLayout(new BorderLayout());
@@ -46,6 +50,7 @@ public class Viewer extends JFrame {
 
         menuBar.add(minutions);
         minutions.add(crossingNumber);
+        minutions.add(filter);
 
         this.add(this.menuBar, BorderLayout.NORTH);
         this.add(this.imageLabel, BorderLayout.CENTER);
@@ -110,14 +115,14 @@ public class Viewer extends JFrame {
         thin.addActionListener(e -> {
             BufferedImage image = ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon());
             imageLabel.setIcon(new ImageIcon(thinning.thin(image)));
+            filteredImage = deepCopy(image);
         });
 
         crossingNumber.addActionListener(e -> {
             BufferedImage image = (ImageSharedOperations.convertIconToImage((ImageIcon) imageLabel.getIcon()));
             CrossingNumber.filterImage(image);
-            for(int i=0;i<4;i++) {
-                CrossingNumber.filterMinutions(image.getWidth(), image.getHeight());
-            }
+
+
             CrossingNumber.minutions.forEach(m->{
                 System.out.println("w: "+m.getX()+", h: "+m.getY());
                 if(CrossingNumber.minutionsRozgalezienia.contains(m)){
@@ -127,6 +132,21 @@ public class Viewer extends JFrame {
                 }
             });
             imageLabel.setIcon(new ImageIcon(image));
+        });
+        filter.addActionListener(e -> {
+            CrossingNumber.filterImage(filteredImage);
+            for(int i=0;i<4;i++) {
+                CrossingNumber.filterMinutions(filteredImage.getWidth(), filteredImage.getHeight());
+            }
+            CrossingNumber.minutions.forEach(m->{
+                System.out.println("w: "+m.getX()+", h: "+m.getY());
+                if(CrossingNumber.minutionsRozgalezienia.contains(m)){
+                    drawCircle(filteredImage, (int)m.getX(), (int)m.getY(),false);
+                }else{
+                    drawCircle(filteredImage, (int)m.getX(), (int)m.getY(),true);
+                }
+            });
+            imageLabel.setIcon(new ImageIcon(filteredImage));
         });
 
     }
@@ -153,6 +173,12 @@ public class Viewer extends JFrame {
             image.setRGB(w,h+2,color);
             image.setRGB(w+1,h+2,color);
         }
+    }
+    public BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
 }

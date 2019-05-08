@@ -63,10 +63,10 @@ public abstract class CrossingNumber {
     public static void filterMinutions(int width, int height){
         List<Point> minutionsToDelete = new ArrayList<>();
         minutions.forEach(m->{
-            if(m.getX()> 3 && m.getX()< width-3 && m.getY()> 3 && m.getY()< height-3){
-                for(int i=-4;i<=4;i++){
-                    for(int j=-4;j<=4;j++){
-                        if(!(i==0&&j==0)) {
+            if(m.getX()> 4 && m.getX()< width-4 && m.getY()> 4 && m.getY()< height-4){
+                for(int i=-5;i<=5;i++){
+                    for(int j=-5;j<=5;j++){
+                        if(!(i==0||j==0)) {
                             Point point = new Point((int) (m.getX() + i), (int) (m.getY() + j));
                             if (minutions.contains(point)) {
                                 minutionsToDelete.add(point);
